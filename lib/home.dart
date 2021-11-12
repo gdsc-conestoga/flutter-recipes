@@ -65,11 +65,28 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _uploadImage() async {
-    final upload = await _picker.pickImage(source: ImageSource.gallery);
+    final upload = await _picker.pickImage(source: ImageSource.camera);
     if (upload == null) return;
 
     setState(() {
       _uploadedFile = upload;
     });
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        duration: const Duration(seconds: 3),
+        dismissDirection: DismissDirection.startToEnd,
+        behavior: SnackBarBehavior.fixed,
+        action: SnackBarAction(
+          label: "Undo",
+          onPressed: () {
+            setState(() {
+              _uploadedFile = null;
+            });
+          },
+        ),
+        content: const Text("Image uploaded"),
+      ),
+    );
   }
 }
