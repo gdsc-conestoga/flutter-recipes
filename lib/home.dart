@@ -48,9 +48,50 @@ class _MyHomePageState extends State<MyHomePage> {
                   if (_uploadedFile == null)
                     const Text("Waiting for upload")
                   else
-                    kIsWeb
-                        ? Image.network(_uploadedFile!.path)
-                        : Image.file(File(_uploadedFile!.path)),
+                    Column(
+                      children: [
+                        ElevatedButton(
+                          style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all(Colors.red),
+                          ),
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (_) => AlertDialog(
+                                content: const Text(
+                                    "Are you sure you want to delete this image?"),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: const Text("Cancel"),
+                                  ),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        _uploadedFile = null;
+                                      });
+                                      Navigator.of(context).pop();
+                                    },
+                                    style: ButtonStyle(
+                                      backgroundColor:
+                                          MaterialStateProperty.all(Colors.red),
+                                    ),
+                                    child: const Text("Delete"),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                          child: const Text("Delete"),
+                        ),
+                        kIsWeb
+                            ? Image.network(_uploadedFile!.path)
+                            : Image.file(File(_uploadedFile!.path)),
+                      ],
+                    ),
                 ],
               ),
             ),
